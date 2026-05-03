@@ -1,5 +1,3 @@
-version: "3.4"
-
 services:
   whisper-asr-webservice-gpu:
     build:
@@ -12,19 +10,39 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    env_file:
+      - .env
     environment:
-      - ASR_MODEL=base
+      - ASR_MODEL=${ASR_MODEL:-large-v3}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - COMPUTE_TYPE=${COMPUTE_TYPE:-float16}
+      - DEVICE=${DEVICE:-cuda}
+      - UPLOAD_DIR=/data/uploads
     ports:
-      - 9000:9000
+      - "9000:9000"
     volumes:
       - ./app:/app/app
-      - cache-pip:/root/.cache/pip
-      - cache-poetry:/root/.cache/poetry
-      - cache-whisper:/root/.cache/whisper
-      - cache-faster-whisper:/root/.cache/faster_whisper
+      - cache-huggingface:/root/.cache/huggingface
+      - cache-torch:/root/.cache/torch
+      - uploads:/data/uploads
+
+  whisper-asr-frontend-gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    env_file:
+      - .env
+    environment:
+      - ASR_BACKEND_URL=http://whisper-asr-webservice-gpu:9000
+    ports:
+      - "9001:9001"
+    depends_on:
+      - whisper-asr-webservice-gpu
+    volumes:
+      - ./frontend:/app/frontend
+    entrypoint: ["uv", "run", "uvicorn", "frontend.app:app", "--host", "0.0.0.0", "--port", "9001"]
 
 volumes:
-  cache-pip:
-  cache-poetry:
-  cache-whisper:
-  cache-faster-whisper:
+  cache-huggingface:
+  cache-torch:
+  uploads:

@@ -1,0 +1,21 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "name": "Python: local debug",
+            "type": "python",
+            "request": "launch",
+            "args": [
+                "webservice:app",
+                "--reload",
+                "--port",
+                "8000"
+            ],
+            "module": "uvicorn",
+            "cwd": "${workspaceFolder}",
+        },
+    ]
+}

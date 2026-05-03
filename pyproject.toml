@@ -1,47 +1,67 @@
-[tool.poetry]
+[project]
 name = "whisper-asr-webservice"
-version = "1.1.0"
-description = "Whisper ASR Webservice is a general-purpose speech recognition webservice."
-homepage  = "https://github.com/ahmetoner/whisper-asr-webservice/"
-license = "https://github.com/ahmetoner/whisper-asr-webservice/blob/main/LICENCE"
-authors = [
-    "Ahmet Öner",
-    "Besim Alibegovic",
-]
+version = "2.0.0"
+description = "Whisper ASR Webservice is a general-purpose speech recognition webservice powered by WhisperX."
 readme = "README.md"
-packages = [{ include = "app" }]
-
-[[tool.poetry.source]]
-name = "pytorch"
-url = "https://download.pytorch.org/whl/cpu"
-secondary = true
-
-[tool.poetry.dependencies]
-python = "^3.10"
-unidecode = "^1.3.4"
-uvicorn = { extras = ["standard"], version = "^0.18.2" }
-gunicorn = "^20.1.0"
-tqdm = "^4.64.1"
-transformers = "^4.22.1"
-python-multipart = "^0.0.5"
-ffmpeg-python = "^0.2.0"
-fastapi = "^0.95.1"
-llvmlite = "^0.39.1"
-numba = "^0.56.4"
-openai-whisper = "20230124"
-faster-whisper = "^0.4.1"
-torch = [
-  {markers = "sys_platform == 'darwin' and platform_machine == 'arm64'", url = "https://download.pytorch.org/whl/cpu/torch-1.13.0-cp310-none-macosx_11_0_arm64.whl"},
-  {markers = "sys_platform == 'linux' and platform_machine == 'arm64'", url="https://download.pytorch.org/whl/cpu/torch-1.13.0-cp310-none-macosx_11_0_arm64.whl"},
-  {markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", url = "https://download.pytorch.org/whl/cpu/torch-1.13.0-cp310-none-macosx_10_9_x86_64.whl"},
-  {markers = "sys_platform == 'linux' and platform_machine == 'aarch64'", url="https://download.pytorch.org/whl/torch-1.13.0-cp310-cp310-manylinux2014_aarch64.whl"},
-  {markers = "sys_platform == 'linux' and platform_machine == 'x86_64'", url="https://download.pytorch.org/whl/cpu/torch-1.13.0%2Bcpu-cp310-cp310-linux_x86_64.whl"},
-  {markers = "sys_platform == 'win' and platform_machine == 'amd64'", url="https://download.pytorch.org/whl/cpu/torch-1.13.0%2Bcpu-cp310-cp310-win_amd64.whl"},
+license = { text = "MIT" }
+requires-python = ">=3.11,<3.13"
+authors = [
+  { name = "Ahmet Öner" },
+  { name = "Besim Alibegovic" },
+  { name = "Jen McQuade" },
+]
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "gunicorn>=23",
+  "python-multipart>=0.0.12",
+  "python-dotenv>=1.0",
+  "ffmpeg-python>=0.2",
+  "sse-starlette>=2.1",
+  "jinja2>=3.1",
+  "httpx>=0.27",
+  "whisperx",
 ]
 
-[tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
+[project.urls]
+Homepage = "https://github.com/jenmcquade/whisper-asr-webservice/"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+]
+
+[tool.uv.sources]
+whisperx = { git = "https://github.com/m-bain/whisperX" }
+
+# Upstream whisperx uses a bare setuptools build backend; some transitive
+# builds (faster-whisper, ctranslate2, pyannote deps) also expect setuptools
+# to be available at build time. Pin a compatible setuptools for whisperx's
+# editable build.
+[tool.uv.extra-build-dependencies]
+whisperx = ["setuptools>=65,<81"]
+
+# Restrict universal resolution to platforms we actually ship for. This keeps
+# conflicting transitive PyTorch index declarations in upstream whisperx out of
+# unused environment splits (e.g. windows, macOS x86_64).
+[tool.uv]
+environments = [
+  "sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "sys_platform == 'linux' and platform_machine == 'x86_64'",
+  "sys_platform == 'linux' and platform_machine == 'aarch64'",
+]
+# torchcodec is a transitive dep of pyannote-audio>=4 but publishes no wheel
+# (and no sdist) for linux/aarch64. Upstream whisperx declares the same
+# override in its own pyproject.toml, but uv only honors override-dependencies
+# from the root project, so we mirror it here. Diarization on linux/aarch64
+# will be unavailable as a result; transcription and alignment still work.
+override-dependencies = [
+  "torchcodec>=0.6.0,<0.8.0; (sys_platform == 'linux' and platform_machine == 'x86_64') or sys_platform == 'darwin' or sys_platform == 'win32'",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

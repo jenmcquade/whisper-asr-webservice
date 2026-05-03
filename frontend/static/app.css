@@ -1,0 +1,644 @@
+:root {
+  /* Podchaser-derived palette (light text on deep purple, hot-pink accent) */
+  --pc-purple-900: #1e0541;
+  --pc-purple-800: #2a0851;
+  --pc-purple-700: #3d0e6e;
+  --pc-purple-600: #4a1b7a;
+  --pc-purple-500: #6b2aa8;
+  --pc-accent-purple: #9b4dff;
+  --pc-accent-purple-strong: #8a3de5;
+  --pc-pink-500: #e91e63;
+  --pc-pink-600: #d1155a;
+  --pc-rose-300: #f45a8c;
+
+  --surface-0: #ffffff;
+  --surface-1: #f6f2fb;
+  --surface-2: #ece4f6;
+  --border: #e0d6ef;
+  --text: #1f1033;
+  --text-muted: #665680;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 5, 40, 0.08);
+  --shadow-md: 0 8px 24px rgba(41, 8, 81, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(233, 30, 99, 0.15), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgba(155, 77, 255, 0.18), transparent 55%),
+    linear-gradient(180deg, var(--pc-purple-800), var(--pc-purple-900));
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ---------- Topbar ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  color: #fff;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.brand-mark {
+  font-size: 28px;
+  line-height: 1;
+  color: var(--pc-pink-500);
+  text-shadow: 0 0 12px rgba(233, 30, 99, 0.4);
+}
+
+.brand-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.brand-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-left: 2px;
+}
+
+.topnav {
+  display: flex;
+  gap: 6px;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+/* ---------- Page shell ---------- */
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 24px 48px;
+}
+
+.hero {
+  color: #fff;
+  padding: 24px 4px 32px;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.15;
+  margin: 0 0 12px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.hero .accent {
+  color: var(--pc-accent-purple);
+}
+
+.hero .lede {
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 56ch;
+  margin: 0;
+}
+
+.card {
+  background: var(--surface-0);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 0 0 12px;
+  font-weight: 800;
+  letter-spacing: -0.005em;
+}
+
+.muted { color: var(--text-muted); }
+.footer { text-align: center; color: rgba(255, 255, 255, 0.55); padding: 24px; font-size: 13px; }
+
+/* ---------- Upload form ---------- */
+
+.upload-form { display: grid; gap: 18px; }
+
+.field { display: grid; gap: 6px; }
+
+.field > label,
+.field legend {
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.field-help {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.field-help code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--pc-accent-purple-strong);
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  color: var(--text);
+  background: var(--surface-1);
+  transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+/* Dropdown caret — the native select control on most browsers looks
+   bland; give it a subtle chevron so it reads as a picker. */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--pc-accent-purple-strong) 50%),
+    linear-gradient(135deg, var(--pc-accent-purple-strong) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) 55%,
+    calc(100% - 14px) 55%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 38px;
+}
+
+/* Styled file picker: the wrapper itself is the dashed drop-zone look,
+   and the browser's ugly default button becomes a branded pill. */
+input[type="file"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+input[type="file"]:hover {
+  border-color: var(--pc-accent-purple);
+  background: var(--surface-0);
+}
+input[type="file"]::file-selector-button,
+input[type="file"]::-webkit-file-upload-button {
+  margin-right: 12px;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, var(--pc-accent-purple), var(--pc-pink-500));
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: filter 150ms ease, transform 120ms ease;
+}
+input[type="file"]::file-selector-button:hover,
+input[type="file"]::-webkit-file-upload-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--pc-accent-purple);
+  background: var(--surface-0);
+  box-shadow: 0 0 0 3px rgba(155, 77, 255, 0.18);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+  /* Align the first row of inputs across all columns — help text below
+     a select pushes the next row down, not the input on the same row. */
+  grid-auto-rows: min-content;
+  align-items: start;
+}
+
+@media (min-width: 641px) {
+  .field-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.field.inline { grid-template-columns: 1fr; max-width: 180px; }
+
+.radio-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  /* Match the height of a standard input so Task visually aligns with
+     the Language/Model selects on the same row. */
+  min-height: 46px;
+  align-items: center;
+}
+.radio,
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  /* Not fully pill — slightly rounded to match the selects/inputs. */
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  user-select: none;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+.radio:hover,
+.check:hover {
+  border-color: var(--pc-accent-purple);
+  background: var(--surface-0);
+}
+.radio:has(input:checked) {
+  border-color: var(--pc-accent-purple);
+  background: rgba(155, 77, 255, 0.08);
+  color: var(--pc-accent-purple-strong);
+}
+.radio input,
+.check input { accent-color: var(--pc-accent-purple); }
+
+.diarize-block {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.diarize-block legend { padding: 0 6px; }
+
+.speaker-counts {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+  font-size: 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 120ms ease, background 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.btn-primary {
+  background: var(--pc-pink-500);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--pc-pink-600); transform: translateY(-1px); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--pc-accent-purple-strong);
+  border-color: var(--border);
+}
+.btn-ghost:hover {
+  border-color: var(--pc-accent-purple);
+  background: rgba(155, 77, 255, 0.08);
+}
+
+.detect-result,
+.form-status,
+.result-card .result-head {
+  font-size: 14px;
+}
+
+.detect-result .result-card,
+.detect-result > .result-card {
+  background: var(--surface-2);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+}
+
+/* ---------- Job page ---------- */
+
+.job-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.job-head h1 { font-size: 22px; margin: 0; }
+
+.job-id {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.badge-done { background: #d3fbe0; color: #135c2a; }
+.badge-error { background: #ffd5dc; color: #800420; }
+.badge-cancelled { background: #fdebd0; color: #7a4a00; }
+
+/* Pipeline header: heading on the left, Stop button on the right. */
+.stages-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.stages-head h2 { margin: 0; }
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+.stop-btn {
+  color: var(--pc-pink-600);
+  border-color: rgba(233, 30, 99, 0.35);
+}
+.stop-btn:hover {
+  background: rgba(233, 30, 99, 0.08);
+  border-color: var(--pc-pink-500);
+  color: var(--pc-pink-600);
+}
+.stop-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.cancel-slot:empty { display: none; }
+.notice {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.notice-cancelled {
+  background: #fdebd0;
+  color: #7a4a00;
+  border: 1px solid rgba(200, 120, 20, 0.25);
+}
+.notice-error {
+  background: #ffd5dc;
+  color: #800420;
+  border: 1px solid rgba(128, 4, 32, 0.25);
+}
+
+/* Probe */
+.probe { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px 24px; }
+.probe-row { display: flex; gap: 8px; align-items: baseline; font-size: 14px; }
+.probe-tags {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.chip {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  color: var(--text-muted);
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+/* Long-form values (multi-line comments, descriptions) read better as a
+   full-width block. Any chip whose text runs long gets word-wrapping with
+   a softer, document-like look instead of becoming a giant balloon. */
+.chip.chip-long {
+  flex: 1 0 100%;
+  padding: 8px 12px;
+  line-height: 1.5;
+  font-size: 13px;
+  color: var(--text);
+}
+
+/* Stages */
+.stage-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.stage-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.stage-label { font-weight: 700; }
+.stage-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.bar {
+  position: relative;
+  background: var(--surface-2);
+  border-radius: var(--radius-pill);
+  height: 26px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.bar-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+.bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, var(--pc-accent-purple), var(--pc-pink-500));
+  transition: width 250ms ease;
+  border-radius: var(--radius-pill);
+  width: 0%;
+}
+.bar-label {
+  position: relative;
+  z-index: 1;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text);
+  mix-blend-mode: normal;
+  letter-spacing: 0.02em;
+}
+
+/* Player */
+.player-card audio { width: 100%; }
+
+/* Results */
+.result-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.result-actions .spacer { flex: 1; }
+
+.error-slot:empty { display: none; }
+.error-slot .error,
+.error-slot > div {
+  background: #ffeceb;
+  color: #8a1414;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.segments { display: grid; gap: 12px; }
+.result-head { color: var(--text-muted); margin-bottom: 4px; }
+
+.segment {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  background: var(--surface-0);
+  cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+  outline: none;
+}
+.segment:hover,
+.segment:focus,
+.segment:active {
+  transform: scale(1.008);
+  border-color: var(--pc-accent-purple);
+  box-shadow: 0 4px 14px rgba(155, 77, 255, 0.16);
+}
+.segment.active {
+  border-color: var(--pc-pink-500);
+  box-shadow: 0 4px 14px rgba(233, 30, 99, 0.18);
+}
+
+.segment header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.speaker {
+  background: var(--surface-2);
+  color: var(--pc-accent-purple-strong);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.time {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.words {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.word {
+  display: inline;
+  border-radius: 4px;
+  padding: 1px 3px;
+  margin: 0 -1px;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+
+.word:hover {
+  background: rgba(155, 77, 255, 0.12);
+}
+
+.word.active {
+  background: rgba(155, 77, 255, 0.18);
+  color: inherit;
+}
+
+
+
+/* Small screens */
+@media (max-width: 640px) {
+  .field-grid { grid-template-columns: 1fr; }
+  .topnav { display: none; }
+  .page { padding-inline: 14px; }
+}

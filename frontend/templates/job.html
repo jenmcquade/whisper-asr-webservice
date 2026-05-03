@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Job {{ job_id[:8] }} — Whisper ASR{% endblock %}
+
+{% block content %}
+<section class="job"
+         hx-ext="sse"
+         sse-connect="/jobs/{{ job_id }}/events"
+         sse-close="done"
+         data-job-id="{{ job_id }}">
+
+  <header class="job-head">
+    <h1>Transcription job</h1>
+    <code class="job-id">{{ job_id }}</code>
+    <div class="job-status" sse-swap="done"></div>
+  </header>
+
+  <section class="card probe-card" id="probe" sse-swap="probe">
+    <div class="muted">Inspecting audio…</div>
+  </section>
+
+  <section class="card stages">
+    <div class="stages-head">
+      <h2>Pipeline</h2>
+      <button
+        type="button"
+        class="btn btn-ghost btn-sm stop-btn"
+        id="stop-btn"
+        hx-post="/jobs/{{ job_id }}/cancel"
+        hx-target="#cancel-notice"
+        hx-swap="innerHTML"
+        {% if not job_active %}hidden{% endif %}
+      >Stop</button>
+    </div>
+    <div id="cancel-notice" class="cancel-slot" sse-swap="cancelled"></div>
+    <ul class="stage-list">
+      {% for code, label in stages %}
+      <li class="stage" data-stage="{{ code }}">
+        <div class="stage-head">
+          <span class="stage-label">{{ label }}</span>
+          <span class="stage-code">{{ code }}</span>
+        </div>
+        <div class="bar" id="bar-{{ code }}">
+          <div
+            class="bar-inner"
+            sse-swap="stage:{{ code }},progress:{{ code }}"
+            hx-swap="innerHTML"
+          >
+            <div class="bar-fill" style="width: 0%"></div>
+            <span class="bar-label">Waiting…</span>
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="card player-card" id="player-card">
+    <h2>Player</h2>
+    <audio id="audio" controls preload="metadata" src="/jobs/{{ job_id }}/audio"></audio>
+  </section>
+
+  <section class="card result-card">
+    <div class="result-actions">
+      <h2>Transcript</h2>
+      <div class="spacer"></div>
+      <div class="result-buttons" id="result-buttons"{% if not already_done %} hidden{% endif %}>
+        <a class="btn btn-primary" href="/jobs/{{ job_id }}/result.json" download>Download JSON</a>
+      </div>
+    </div>
+    <div id="error" class="error-slot" sse-swap="error"></div>
+    <div id="result" sse-swap="result" hx-swap="innerHTML">
+      <div class="muted">Transcript will appear here when the pipeline finishes.</div>
+    </div>
+  </section>
+
+  <!-- Hidden carrier for the raw JSON so player.js can build its word index. -->
+  <div id="result-json-store" sse-swap="result-json" hx-swap="innerHTML" hidden></div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/player.js"></script>
+{% endblock %}

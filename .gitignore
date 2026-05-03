@@ -1,4 +1,5 @@
 *.pyc
+__pycache__/
 
 # Packages
 *.egg
@@ -30,13 +31,41 @@ pip-log.txt
 MANIFEST.in
 /setup.py
 /docs/site/*
-/tests/fixtures/simple_project/setup.py
-/tests/fixtures/project_with_extras/setup.py
 .mypy_cache
 
 .venv
 /releases/*
 pip-wheel-metadata
-/poetry.toml
 
-poetry/core/*
+# Audio artifacts
+*.wav
+*.mp3
+*.m4a
+*.aac
+*.flac
+*.ogg
+*.oga
+*.opus
+*.wma
+*.webm
+*.aiff
+*.aif
+*.mp4
+*.m4b
+*.3gp
+*.amr
+*.mka
+*.caf
+*.au
+*.snd
+tempFiles/
+app/tempFiles/
+
+# Local run artefacts (per-job uploads + decoded WAVs + probes).
+# In Docker this directory is overridden to /data/uploads.
+/output/
+
+# Local env files (may contain secrets like HF_TOKEN)
+.env
+*.env
+!example.env
